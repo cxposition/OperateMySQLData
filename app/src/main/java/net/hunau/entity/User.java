@@ -1,17 +1,18 @@
 package net.hunau.operatemysqldata.entity;
 
+
 public class User {
-    private int id;
+    private String id;
     private String name;
     private String pwd;
     private String sexy;
-    private boolean isused;
+    private String isused;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,15 +40,15 @@ public class User {
         this.sexy = sexy;
     }
 
-    public boolean isIsused() {
+    public String isIsused() {
         return isused;
     }
 
-    public void setIsused(boolean isused) {
+    public void setIsused(String isused) {
         this.isused = isused;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -56,5 +57,19 @@ public class User {
                 ", sexy='" + sexy + '\'' +
                 ", isused=" + isused +
                 '}';
+    }*/
+    @Override
+    public String toString() {
+        String result = "";
+        result += "编号：" + this.id + "，";
+        result += "用户名：" + this.name + "，";
+        result += "密码：" + this.pwd + "， ";
+        result += "性别：" + this.sexy + "，";
+        if (this.isused.equals("1")) {
+            result += "是否有效：是";
+        } else {
+            result += "是否有效：否";
+        }
+        return result+"\n";
     }
 }

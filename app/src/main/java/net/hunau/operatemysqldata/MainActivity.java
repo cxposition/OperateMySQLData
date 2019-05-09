@@ -1,5 +1,7 @@
 package net.hunau.operatemysqldata;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,10 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import net.hunau.operatemysqldata.entity.User;
 
 import net.hunau.entity.DBLink;
 
@@ -124,34 +128,63 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onQuery(View view) {
-        final String[] str = {""};
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<String> list = util.query(conn, "select * from tb_user");
+                String str = "";
+                List<User> list = util.query(conn, "select * from tb_user");
+                Message msg = new Message();
                 Log.i("onQuery", "onQuery");
-                for (String i : list) {
-                    str[0] += i + "\n";
+                if (list==null) {
+                    msg.what = 0;
+                    msg.obj = "查询结果，空空如也";
+                    //非UI线程不要试着去操作界面
+                } else {
+                    String ss = "";
+                    for(int i = 0; i < list.size(); i++) {
+                        ss += list.get(i).toString();
+                    }
+                    msg.what = 1;
+                    msg.obj = ss;
                 }
+                handler.sendMessage(msg);
             }
         }).start();
-        display.setText(str[0]);
     }
 
     public void findById(View view) {
         final String id = testId.getText().toString();
-        final String[] str = {""};
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<String> list = util.query(conn, "select * from tb_user where id = " + id);
-                for (String i : list) {
-                    System.out.println(i);
-                    str[0] += i + "\n";
-                }
+                String str = "";
+                List<net.hunau.operatemysqldata.entity.User> list = util.query(conn, "select * from tb_user where id = " + id);
+                Message msg = new Message();
                 Log.i("onQuery", "onQuery");
+                if (list==null) {
+                    msg.what = 0;
+                    msg.obj = "查询结果，空空如也";
+                    //非UI线程不要试着去操作界面
+                } else {
+                    String ss = "";
+                    for(int i = 0; i < list.size(); i++) {
+                        ss += list.get(i).toString();
+                    }
+                    msg.what = 1;
+                    msg.obj = ss;
+                }
+                handler.sendMessage(msg);
             }
         }).start();
-        display.setText(str[0]);
     }
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            ((TextView) findViewById(R.id.display)).setText((String) message.obj);
+            String str = "查询不存在";
+            if (message.what == 1) str = "查询成功";
+            Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    });
 }

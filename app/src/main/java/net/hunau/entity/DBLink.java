@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import net.hunau.operatemysqldata.entity.User;
 
 public class DBLink {
     final String DRIVER_NAME = "com.mysql.jdbc.Driver";
@@ -25,13 +26,13 @@ public class DBLink {
         return conn;
     }
 
-    public List<String> query(Connection conn, String sql) {
+    public List<User> query(Connection conn, String sql) {
         if (conn == null) {
             return null;
         }
         Statement statement = null;
         ResultSet result = null;
-        List<String> list = new ArrayList<>();
+        List<User> list = new ArrayList<>();
         try {
             statement = conn.createStatement();
             result = statement.executeQuery(sql);
@@ -43,14 +44,13 @@ public class DBLink {
                 int pwdColumnIndex = result.findColumn("pwd");
                 int isUsedColumnIndex = result.findColumn("isused");
                 while (!result.isAfterLast()) {
-                    String str = "";
-                    str += "ID:" + result.getString(idColumnIndex);
-                    str +="密码:" + result.getString(pwdColumnIndex);
-                    str +="姓名:" + result.getString(nameColumnIndex);
-                    str +="性别:" + result.getString(sexyColumnIndex);
-                    str +="是否有效:" + (result.getString(isUsedColumnIndex).toString().equals("1") ? "是" : "否");
-                    //System.out.println(str);
-                    list.add(str);
+                    User user = new User();
+                    user.setSexy(result.getString(sexyColumnIndex));
+                    user.setName(result.getString(nameColumnIndex));
+                    user.setId(result.getString(idColumnIndex));
+                    user.setIsused(result.getString(isUsedColumnIndex));
+                    user.setPwd(result.getString(pwdColumnIndex));
+                    list.add(user);
                     result.next();
                 }
             }
@@ -69,9 +69,6 @@ public class DBLink {
             } catch (SQLException sqle) {
                 sqle.printStackTrace();
             }
-        }
-        for (String i :list) {
-            System.out.println(i);
         }
         return list;
     }
