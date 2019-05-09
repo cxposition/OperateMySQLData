@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+
 import net.hunau.operatemysqldata.entity.User;
 
 import net.hunau.entity.DBLink;
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String sql = "insert into tb_user(name,pwd,sexy,isused) values('" + name + "','" + pwd + "','" + sex + "',1)";
+                System.out.println(sql);
                 util.execSQL(conn, sql);
                 Log.i("onInsert", "onInsert");
             }
@@ -120,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String sql = "update tb_user set name='" + name + "',pwd = '" + pwd + "',sex = '" + sex + "' where id = " + id;
+                System.out.println(sql);
                 util.execSQL(conn, sql);
                 Log.i("onUpdate", "onUpdate");
             }
@@ -135,13 +138,13 @@ public class MainActivity extends AppCompatActivity {
                 List<User> list = util.query(conn, "select * from tb_user");
                 Message msg = new Message();
                 Log.i("onQuery", "onQuery");
-                if (list==null) {
+                if (list == null) {
                     msg.what = 0;
                     msg.obj = "查询结果，空空如也";
                     //非UI线程不要试着去操作界面
                 } else {
                     String ss = "";
-                    for(int i = 0; i < list.size(); i++) {
+                    for (int i = 0; i < list.size(); i++) {
                         ss += list.get(i).toString();
                     }
                     msg.what = 1;
@@ -161,13 +164,13 @@ public class MainActivity extends AppCompatActivity {
                 List<net.hunau.operatemysqldata.entity.User> list = util.query(conn, "select * from tb_user where id = " + id);
                 Message msg = new Message();
                 Log.i("onQuery", "onQuery");
-                if (list==null) {
+                if (list == null) {
                     msg.what = 0;
                     msg.obj = "查询结果，空空如也";
                     //非UI线程不要试着去操作界面
                 } else {
                     String ss = "";
-                    for(int i = 0; i < list.size(); i++) {
+                    for (int i = 0; i < list.size(); i++) {
                         ss += list.get(i).toString();
                     }
                     msg.what = 1;
@@ -177,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
