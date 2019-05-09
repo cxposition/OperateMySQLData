@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">MYSQL数据库操作</string>
+    <string name="btn1">连接数据库</string>
+    <string name="btn2">添加数据库</string>
+    <string name="btn3">删除数据库</string>
+    <string name="btn4">修改数据库</string>
+    <string name="btn5">编号查询</string>
+    <string name="tv1">编号:</string>
+    <string name="tv2">姓名:</string>
+    <string name="tv3">密码:</string>
+    <string name="tv4">性别:</string>
+    <string name="tv5">是否有效:</string>
+    <string name="tv6">查询结果:</string>
+    <string name="et1">请输入编号</string>
+    <string name="et2">请输入姓名</string>
+    <string name="et3">请输入密码</string>
+</resources>
